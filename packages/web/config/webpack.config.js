@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const ForksTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 module.exports = env => {
   const isProductionEnv = env.NODE_ENV === 'production';
@@ -18,7 +19,7 @@ module.exports = env => {
       'react-vendors': ['react','react-dom']
     },
     context: path.resolve(__dirname,'..'),
-    devtool: isProductionEnv ? false : 'inline-source-map',
+    devtool: isProductionEnv ? false : 'source-map',
     module: {
       rules: [
         {
@@ -26,12 +27,14 @@ module.exports = env => {
           exclude: '/node_modules/',
           use: {
             loader: 'babel-loader',
+            options: {
+              plugins: [!isProductionEnv && require('react-refresh/babel')].filter(Boolean)
+            }
           }
         },
         {
           test: /\.html?$/i,
           use: 'html-loader',
-          // sources: false,
         }
       ]
     },
@@ -53,7 +56,6 @@ module.exports = env => {
     devServer: {
       static: './public',
       compress: true,
-      hot: true,
       port: env.PORT || 3000,
       client: {
         logging: 'error',
@@ -63,15 +65,8 @@ module.exports = env => {
         },
         progress: true
       },
-      watchFiles: ["./src/**/*","./public/**/*","./config/*"]
     },
     plugins: [
-      // new ForksTsCheckerWebpackPlugin({
-      //   async: false,
-      //   eslint: {
-      //     files: "./src/**/*"
-      //   }
-      // }),
       new WebpackManifestPlugin(),
       new HtmlWebpackPlugin({
         inject: 'body',
@@ -79,16 +74,29 @@ module.exports = env => {
         template: './public/index.html',
         chunks: 'all',
         filename: 'index.html'
+      }),
+      !isProductionEnv && new webpack.HotModuleReplacementPlugin(),
+      !isProductionEnv && new ReactRefreshWebpackPlugin({
+        exclude: /node_modules/,
+      }),
+      new ForksTsCheckerWebpackPlugin({
+        async: false,
+        eslint: {
+          files: "./src/**/*"
+        }
       })
-    ],
+    ].filter(Boolean),
     optimization: {
       chunkIds: 'size',
       moduleIds: 'size',
       minimizer: [
         new TerserWebpackPlugin({
-
+          exclude: /node_modules/,
+          terserOptions: {
+            sourceMap: true
+          }
         })
-      ],
+      ].filter(Boolean),
       splitChunks: {
         chunks: 'all'
       },

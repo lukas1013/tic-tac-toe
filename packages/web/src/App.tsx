@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function App() {
-  const hw: string = 'Hello World'
+  const hw = 'Hello World'
   return (
     <div>{hw}</div>
   )
