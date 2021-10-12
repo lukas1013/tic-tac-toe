@@ -70,10 +70,9 @@ module.exports = env => {
       new WebpackManifestPlugin(),
       new HtmlWebpackPlugin({
         inject: 'body',
-        title: 'Tic-Tac-Toe',
         template: './public/index.html',
-        chunks: 'all',
-        filename: 'index.html'
+        filename: 'index.html',
+
       }),
       !isProductionEnv && new webpack.HotModuleReplacementPlugin(),
       !isProductionEnv && new ReactRefreshWebpackPlugin({
