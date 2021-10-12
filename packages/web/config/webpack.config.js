@@ -5,6 +5,7 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const ForksTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = env => {
   const isProductionEnv = env.NODE_ENV === 'production';
@@ -35,6 +36,10 @@ module.exports = env => {
         {
           test: /\.html?$/i,
           use: 'html-loader',
+        },
+        {
+          test: /\.css$/,
+          use: ['style-loader','css-loader']
         }
       ]
     },
@@ -68,6 +73,10 @@ module.exports = env => {
     },
     plugins: [
       new WebpackManifestPlugin(),
+      new MiniCssExtractPlugin({
+        filename: 'static/css/[id].[contenthash:8].css',
+        chunkFilename: 'static/css/[chunkhash:8].chunk.css'
+      }),
       new HtmlWebpackPlugin({
         inject: 'body',
         template: './public/index.html',
