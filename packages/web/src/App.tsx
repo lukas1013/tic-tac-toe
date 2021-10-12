@@ -1,8 +1,15 @@
 import React from "react";
+import { 
+  BrowserRouter as Router,
+  Link
+} from 'react-router-dom';
+import Routes from "./routes";
+
 
 export default function App() {
-  const hw = 'Hello World'
   return (
-    <div>{hw}</div>
+    <Router>
+      <Routes/>
+    </Router>
   )
 }
