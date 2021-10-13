@@ -6,21 +6,16 @@ const ForksTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = env => {
   const isProductionEnv = env.NODE_ENV === 'production';
-
+  
   return {
     mode: env.NODE_ENV,
-    entry: {
-      main: { 
-        import: './src/index.tsx',
-        dependOn: ['react-vendors']
-      },
-      'react-vendors': ['react','react-dom']
-    },
-    context: path.resolve(__dirname,'..'),
-    devtool: isProductionEnv ? false : 'source-map',
+    entry: './src/index.tsx',
+    context: path.resolve(__dirname, '..'),
+    devtool: isProductionEnv ? false : 'inline-source-map',
     module: {
       rules: [
         {
@@ -29,39 +24,66 @@ module.exports = env => {
           use: {
             loader: 'babel-loader',
             options: {
-              plugins: [!isProductionEnv && require('react-refresh/babel')].filter(Boolean)
+              plugins: [!isProductionEnv && require.resolve('react-refresh/babel')].filter(Boolean)
             }
           }
         },
         {
-          test: /\.html?$/i,
+          test: /\.html$/i,
+          exclude: /node_modules/,
           use: 'html-loader',
         },
         {
           test: /\.css$/,
-          use: ['style-loader','css-loader']
+          exclude: /node_modules/,
+          use: [
+            isProductionEnv ? {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                esModule: true,
+                // emit: true
+              }
+            } : {
+              loader: 'style-loader',
+              options: {
+                injectType: 'singletonStyleTag'
+              }
+            },
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                importLoaders: 1
+              }
+            }, {
+              loader: 'postcss-loader',
+              options: {
+                postcssOptions: {
+                  sourceMap: true,
+                  config: path.resolve(__dirname, 'postcss.config.js')
+                }
+              }
+            }]
         }
       ]
     },
     resolve: {
-      extensions: ['.tsx','.ts','.js','.jsx']
+      extensions: ['.tsx', '.ts', '.js', '.jsx']
     },
     output: {
-      filename: 'static/js/[name].[contenthash:8].min.js',
+      filename: 'static/js/[name].[contenthash:8].js',
       chunkFilename: 'static/js/[id].[chunkhash:8].chunk.js',
-      path: path.resolve(__dirname, 'build'),
-      clean: true,
-      globalObject: 'this'
+      path: isProductionEnv ? path.resolve(__dirname, '..','build') : path.resolve(__dirname,'..','dist'),
+      clean: true
     },
     performance: {
       hints: 'warning'
     },
-    externals: ['@types/react'],
-    stats: 'detailed',
     devServer: {
       static: './public',
       compress: true,
       port: env.PORT || 3000,
+      hot: true,
       client: {
         logging: 'error',
         overlay: {
@@ -81,22 +103,22 @@ module.exports = env => {
         inject: 'body',
         template: './public/index.html',
         filename: 'index.html',
-
       }),
-      !isProductionEnv && new webpack.HotModuleReplacementPlugin(),
       !isProductionEnv && new ReactRefreshWebpackPlugin({
         exclude: /node_modules/,
       }),
       new ForksTsCheckerWebpackPlugin({
         async: false,
         eslint: {
-          files: "./src/**/*"
+          files: "./src/**/*.{ts,tsx,js,jsx}"
         }
-      })
+      }),
+      new CssMinimizerPlugin(),
     ].filter(Boolean),
     optimization: {
-      chunkIds: 'size',
-      moduleIds: 'size',
+      chunkIds: isProductionEnv ? 'size' : 'named',
+      moduleIds: isProductionEnv ? 'size' : 'named',
+      minimize: isProductionEnv,
       minimizer: [
         new TerserWebpackPlugin({
           exclude: /node_modules/,
@@ -106,11 +128,17 @@ module.exports = env => {
         })
       ].filter(Boolean),
       splitChunks: {
-        chunks: 'all'
+        cacheGroups: {
+          vendors: {
+            test: /[\\/]node_modules[\\/]/,
+            chunks: 'all',
+            name: 'vendors.chunk'
+          }
+        }
       },
-      runtimeChunk: {
-        name: entrypoint => `runtime-${entrypoint.name}`
-      }
+      runtimeChunk: 'single',
+      mangleWasmImports: isProductionEnv,
+      sideEffects: true
     },
     stats: {
       moduleAssets: false,
