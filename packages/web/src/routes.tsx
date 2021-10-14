@@ -7,7 +7,7 @@ import {
 
 import Home from "./pages/Home";
 
-export default function Routes() {
+export default function Routes(): JSX.Element {
   return (
     <Switch>
       <Route path='/' exact component={Home} />
