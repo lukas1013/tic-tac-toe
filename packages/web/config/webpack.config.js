@@ -52,7 +52,7 @@ module.exports = env => {
             {
               loader: 'css-loader',
               options: {
-                modules: true,
+                modules: false,
                 importLoaders: 1
               }
             }, {
@@ -95,7 +95,7 @@ module.exports = env => {
     },
     plugins: [
       new WebpackManifestPlugin(),
-      new MiniCssExtractPlugin({
+      isProductionEnv && new MiniCssExtractPlugin({
         filename: 'static/css/[id].[contenthash:8].css',
         chunkFilename: 'static/css/[chunkhash:8].chunk.css'
       }),
