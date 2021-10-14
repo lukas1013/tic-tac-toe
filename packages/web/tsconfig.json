@@ -1,20 +1,22 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "lib": ["DOM","DOM.Iterable","ESNext"],
     "outDir": "./build/",
     "noImplicitAny": false,
     "module": "es6",
     "target": "es5",
-    "jsx": "preserve",
+    "jsx": "react",
     "allowJs": true,
     "moduleResolution": "node",
     "alwaysStrict": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
+    // "esModuleInterop": true,
     "sourceMap": true,
     "strict": true,
-    "resolveJsonModule": true,
-    "noEmit": true
+    // "resolveJsonModule": true,
+    // "noEmit": true,
+    "forceConsistentCasingInFileNames": true
   },
   "exclude": [
     "node_modules",
