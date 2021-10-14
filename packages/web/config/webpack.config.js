@@ -64,6 +64,10 @@ module.exports = env => {
                 }
               }
             }]
+        },
+        {
+          test: /\.(png|jpg|svg)$/i,
+          type: 'asset/resource'
         }
       ]
     },
@@ -73,7 +77,8 @@ module.exports = env => {
     output: {
       filename: 'static/js/[name].[contenthash:8].js',
       chunkFilename: 'static/js/[id].[chunkhash:8].chunk.js',
-      path: isProductionEnv ? path.resolve(__dirname, '..','build') : path.resolve(__dirname,'..','dist'),
+      assetModuleFilename: 'static/media/[hash:8][ext][query]',
+      path: isProductionEnv ? path.resolve(__dirname, '..', 'build') : path.resolve(__dirname, '..', 'dist'),
       clean: true
     },
     performance: {
