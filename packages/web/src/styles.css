@@ -1,0 +1,34 @@
+:root {
+  --color-rusty-red: #DC283D;
+  --color-pacific-blue: #19AAC7;
+  --color-black-olive: #353734;
+  --color-emerald: #3BC480;
+  --color-white: #FFF;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 16px;
+  color: var(--color-white);
+  background-color: var(--color-black-olive);
+  font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  align-content: space-between;
+  box-sizing: border-box;
+  overflow-y: auto;
+}

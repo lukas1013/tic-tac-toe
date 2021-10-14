@@ -1,0 +1,100 @@
+header {
+  width: 100%;
+  height: fit-content;
+  box-sizing: border-box;
+}
+
+header .content {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template: 
+    "icon pname pname score" 1fr
+    "icon lvl . pscore" 1fr
+    / 1fr 2fr 2fr 1fr;
+  column-gap: 3%;
+  padding: 1.5%;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+#user-name {
+  grid-area: pname;
+  font-size: 16px;
+}
+
+#level {
+  grid-area: lvl;
+}
+
+#score-text {
+  font-size: 20px;
+  text-align: right;
+  grid-area: score;
+}
+
+#player-score {
+  grid-area: pscore;
+  margin-right: 3%;
+  text-align: right;
+}
+
+nav.button-container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 15%;
+  justify-content: center;
+}
+
+button.home {
+  background-color: var(--color-rusty-red);
+  color: var(--color-white);
+  border: none;
+  border-radius: 5%;
+  padding: 2%;
+  width: 80%;
+  border-radius: .6rem;
+  margin: 2%;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-family: 'PT Serif', 'Times New Roman', Times, 'Times Roman', serif;
+}
+
+button.home:hover {
+  font-weight: 600;
+  background-color: transparent;
+  color: var(--color-rusty-red);
+  transition: all .2s;
+}
+
+@media only screen and (min-width: 480px) {
+  header .content {
+    grid-template-columns: 68px 2fr 2fr 1fr;
+    column-gap: 1%;
+  }
+
+  nav.button-container {
+    margin-bottom: 0;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  button.home {
+    margin: 1%;
+    padding: 1.5%;
+    width: 70%;
+  }
+}
+
+@media only screen  and (min-width: 900px) {
+  header .content {
+    padding: 1%;
+  }
+
+  button.home {
+    width: 60%;
+    padding: 1%;
+    margin: .7%;
+  }
+}

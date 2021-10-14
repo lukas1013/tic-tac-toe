@@ -1,0 +1,16 @@
+#profile-icon {
+  background-color: #fff;
+  border-radius: 50%;
+  width: 13vw;
+  height: 13vw;
+  grid-area: icon;
+}
+
+@media only screen and (min-width: 480px) {
+  #profile-icon {
+    width: 12vw;
+    height: 12vw;
+    max-width: 60px;
+    max-height: 60px;
+  }
+}
