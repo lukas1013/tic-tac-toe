@@ -1,6 +1,7 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "es2018",
+    "target": "ESNext",
     // "module": "commonjs",
     // "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -12,9 +13,10 @@
     "removeComments": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    // "resolveJsonModule": true
+    // "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
-    "src/**/*.{ts|js}"
+    "src/**/*.ts"
   ]
 }

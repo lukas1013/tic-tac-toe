@@ -6,5 +6,6 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "noImplicitAny": true,
   }
 }
