@@ -8,7 +8,7 @@
     "strict": true,
     "allowJs": true,
     "rootDir": "./src",
-    "outDir": "./build",
+    // "outDir": "./build",
     // "skipLibCheck": true,
     "removeComments": true,
     "experimentalDecorators": true,

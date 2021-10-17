@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.createTable('users', {
+    return queryInterface.createTable('players', {
       id: {
         type: Sequelize.INTEGER.UNSIGNED,
         autoIncrement: true,
@@ -13,10 +13,20 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      player: {
+      name: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true
+      },
+      score: {
+        type: Sequelize.INTEGER.UNSIGNED,
+        defaultValue: 0,
+        allowNull: true
+      },
+      level: {
+        type: Sequelize.INTEGER.UNSIGNED,
+        defaultValue: 1,
+        allowNull: false
       },
       email: {
         type: Sequelize.STRING,
@@ -41,6 +51,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('users');
+    return queryInterface.dropTable('players');
   }
 };

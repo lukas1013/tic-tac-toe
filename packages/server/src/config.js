@@ -4,6 +4,7 @@ require('dotenv').config({
 
 module.exports = {
   environment: process.env.NODE_ENV,
+  app_secret: process.env.APP_SECRET,
   db: {
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
