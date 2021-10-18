@@ -5,21 +5,21 @@ import { v1 as uuidv1 } from 'uuid';
 import database from '../../config/database';
 
 interface PlayerInterface {
-  id?: string,
-  playerId: string,
-  name: string,
-  email: string,
-  score: number,
-  level: number,
-  password: string,
-  isGuest?: true | false
-  createdAt?: Date,
-  updatedAt?: Date
+  id?: string;
+  playerId?: string;
+  name: string;
+  email: string;
+  score?: number;
+  level?: number;
+  password: string;
+  isGuest?: true | false;
+  createdAt?: Date;
+  updatedAt?: Date;
   passwordHash?: string;
   passwordMatches?: true | false;
 }
 
-interface PlayerCreationAttributes extends Optional<PlayerInterface, "id" | "email" | "score" | "level" | "updatedAt" | "createdAt"> { }
+interface PlayerCreationAttributes extends Optional<PlayerInterface, "id" | "email" | "password" | "score" | "level" | "updatedAt" | "createdAt"> { }
 
 interface PlayerInstance extends Model<PlayerInterface, PlayerCreationAttributes>, PlayerInterface { }
 
@@ -102,30 +102,38 @@ async function checkPassword(password: string, passwordHash: string) {
   return await bcrypt.compare(password, passwordHash)
 }
 
-interface PlayerAttr {
-  password: string, 
-  email: string, 
-  name?: string
-}
+async function createInstance(player: PlayerInterface | string, alreadyExists: true | false): Promise<PlayerInstance | null>;
+async function createInstance(isGuest: true, guest: Optional<PlayerInterface, "password" | "email" | "playerId" | "score" | "level">): Promise<PlayerInstance | null>;
+async function createInstance(playerOrIsGuest: PlayerInterface | string | true | false, existsOrGuest: true | false | Optional<PlayerInterface, "password" | "email" | "playerId" | "score" | "level">) {
+  //creates guest
+  if (playerOrIsGuest === true && typeof existsOrGuest === 'object') {
+    const guest = await Player.create({
+      playerId: uuidv1(),
+      name: existsOrGuest.name,
+      isGuest: true,
+      password: 'guest'
+    })
 
-async function createInstance(player: PlayerAttr | string, alreadyExists: true | false): Promise<PlayerInstance | null> {
-  if (alreadyExists) {
+    return guest
+  }
+
+  if (typeof existsOrGuest === 'boolean' && typeof playerOrIsGuest === 'string') {
     const _player = await Player.findOne({
       where: {
-        email: player
+        email: playerOrIsGuest
       }
     })
 
     return _player
   }
 
-  //creates a new player
-  if (typeof player === 'object' && player.email && player.name) {
+  //creates player
+  if (typeof playerOrIsGuest === 'object') {
     const _player = await Player.create({
       playerId: uuidv1(),
-      password: player.password,
-      email: player.email,
-      name: player.name
+      password: playerOrIsGuest.password,
+      email: playerOrIsGuest.email,
+      name: playerOrIsGuest.name
     })
 
     return _player

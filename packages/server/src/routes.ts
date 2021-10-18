@@ -14,7 +14,8 @@ router.get('/', (request,response) => {
 })
 
 router.post('/auth/signup/:name/:email/:password', ValidationMiddleware, AuthController.signUp)
-router.post('/auth/signup/:name/:email/', ValidationMiddleware, AuthController.signUp)
+router.post('/auth/signup/:name/:email', ValidationMiddleware, AuthController.signUp)
+router.post(['/auth/signup','/auth/signup/:name'], AuthController.signUp)
 router.post('/auth/signin', AuthController.signIn)
 
 router.use(AuthMiddleware)

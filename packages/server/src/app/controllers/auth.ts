@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Player, { checkPassword, createInstance } from '../models/Player';
+import { v4 as uuidv4 } from 'uuid';
 
 import { app_secret } from '../../config';
 import generateToken from './utils/generateToken';
@@ -8,9 +9,21 @@ class AuthController {
   async signUp(req: Request, res: Response) {
     const { email, name, password } = req.params;
     
-    if (!email && !password && !name) {
+    if (!email && !password) {
       //creates a guest
-      return
+      const guest = await createInstance(true, {
+        isGuest: true,
+        name: name ?? 'Guest' + uuidv4().slice(0,10)
+      })
+
+      if (guest) {
+        return res.json({
+          guest,
+          token: generateToken(guest.playerId, app_secret)
+        })
+      }
+
+      return res.status(400).send()
     }
     
     //creates a new player
