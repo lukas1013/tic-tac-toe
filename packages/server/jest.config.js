@@ -6,9 +6,11 @@ module.exports = {
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
     '<rootDir>/__tests__/utils',
+    '<rootDir>/__tests__/factories.*s',
     '<rootDir>/__tests__/coverage'
   ],
   collectCoverage: true,
   collectCoverageFrom: ['src/**'],
-  coverageDirectory: '<rootDir>/__tests__/coverage'
+  coverageDirectory: '<rootDir>/__tests__/coverage',
+  testTimeout: 10000
 }

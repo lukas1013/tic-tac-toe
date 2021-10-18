@@ -21,7 +21,7 @@ describe('Authentication', () => {
     })
 
     const response = await request(app)
-      .post('/auth/signup')
+      .post('/auth/signin')
       .send({
         email: player.email,
         password: '12345'
@@ -39,7 +39,7 @@ describe('Authentication', () => {
     })
 
     const response = await request(app)
-      .post('/auth/signup')
+      .post('/auth/signin')
       .send({
         email: player.email,
         password: '48130'
@@ -57,7 +57,7 @@ describe('Authentication', () => {
     })
 
     const response = await request(app)
-      .post('/auth/signup')
+      .post('/auth/signin')
       .send({
         email: player.email,
         password: '12345'
