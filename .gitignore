@@ -4,3 +4,4 @@ build
 .env
 !.env.test
 coverage
+packages/server/__tests__/factories.js

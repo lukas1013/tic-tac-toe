@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
 
-export default function(playerId, app_secret) {
-  return jwt.sign({ playerId }, app_secret)
+export default function(id, app_secret) {
+  return jwt.sign({ id }, app_secret)
 }
