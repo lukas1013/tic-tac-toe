@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Player, { checkPassword, createInstance } from '../models/Player';
+import { checkPassword, createInstance } from '../models/Player';
 import { v4 as uuidv4 } from 'uuid';
 
 import { app_secret } from '../../config';
@@ -11,10 +11,7 @@ class AuthController {
     
     if (!email && !password) {
       //creates a guest
-      const guest = await createInstance(true, {
-        isGuest: true,
-        name: name ?? 'Guest' + uuidv4().slice(0,10)
-      })
+      const guest = await createInstance({ name: name ?? 'Guest' + uuidv4().slice(0,10) }, true)
 
       if (guest) {
         return res.json({
@@ -27,7 +24,7 @@ class AuthController {
     }
     
     //creates a new player
-    const player = await createInstance({ email, name, password }, false);
+    const player = await createInstance({ email, name, password });
 
     if (player) {
       return res.json({
@@ -41,8 +38,10 @@ class AuthController {
 
   async signIn(req: Request, res: Response) {
     const { email, password } = req.body;
-    const player = await Player.findOne({
-      attributes: ['password'],
+    const player = await createInstance({
+      attributes: [
+        'password', 'email', 'isGuest', 'level', 'score', 'name', 'playerId'
+      ],
       where: { email }
     })
 
@@ -51,7 +50,6 @@ class AuthController {
     }
 
     if (!(await checkPassword(password, player.getDataValue('password')))) {
-      console.log(password, player.getDataValue('password'))
       return res.status(401).send({ message: 'Incorrect password' })
     }
 

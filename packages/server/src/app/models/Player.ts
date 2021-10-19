@@ -102,38 +102,36 @@ async function checkPassword(password: string, passwordHash: string) {
   return await bcrypt.compare(password, passwordHash)
 }
 
-async function createInstance(player: PlayerInterface | string, alreadyExists: true | false): Promise<PlayerInstance | null>;
-async function createInstance(isGuest: true, guest: Optional<PlayerInterface, "password" | "email" | "playerId" | "score" | "level">): Promise<PlayerInstance | null>;
-async function createInstance(playerOrIsGuest: PlayerInterface | string | true | false, existsOrGuest: true | false | Optional<PlayerInterface, "password" | "email" | "playerId" | "score" | "level">) {
+interface findPlayerInterface {
+  attributes?: Array<'playerId' | 'name' | 'email' | 'score' | 'level' | 'password' | 'isGuest'>,
+  where?: Optional<PlayerInterface, 'name' | 'email' | 'password'>
+}
+
+async function createInstance(player: PlayerInterface | findPlayerInterface | Optional<PlayerInterface, "password" | "email" | "playerId" | "score" | "level">, isGuest: true | false = false): Promise<PlayerInstance | null> {
   //creates guest
-  if (playerOrIsGuest === true && typeof existsOrGuest === 'object') {
-    const guest = await Player.create({
+  if (isGuest && 'name' in player) {
+    const _guest = await Player.create({
       playerId: uuidv1(),
-      name: existsOrGuest.name,
+      name: player.name,
       isGuest: true,
       password: 'guest'
     })
 
-    return guest
+    return _guest
   }
 
-  if (typeof existsOrGuest === 'boolean' && typeof playerOrIsGuest === 'string') {
-    const _player = await Player.findOne({
-      where: {
-        email: playerOrIsGuest
-      }
-    })
-
+  if ('attributes' in player) {
+    const _player = await Player.findOne(player)
     return _player
   }
 
   //creates player
-  if (typeof playerOrIsGuest === 'object') {
+  if ('password' in player) {
     const _player = await Player.create({
       playerId: uuidv1(),
-      password: playerOrIsGuest.password,
-      email: playerOrIsGuest.email,
-      name: playerOrIsGuest.name
+      password: player.password,
+      email: player.email,
+      name: player.name
     })
 
     return _player
@@ -141,6 +139,5 @@ async function createInstance(playerOrIsGuest: PlayerInterface | string | true |
 
   return null
 }
-// async function createInstance(alreadyExists: true | false, email: string): Promise<PlayerInstance | null>;
 
-export { Player as default, createInstance, checkPassword };
+export { createInstance, checkPassword };

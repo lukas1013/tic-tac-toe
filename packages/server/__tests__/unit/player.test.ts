@@ -1,4 +1,4 @@
-import Player from '../../src/app/models/Player';
+import * as Player from '../../src/app/models/Player';
 import bcrypt from 'bcryptjs';
 import { v1 as uuidv1 } from 'uuid';
 
@@ -10,7 +10,7 @@ describe('Player', () => {
   })
 
   it('should encrypt player password', async () => {
-    const player = await Player.create({
+    const player = await Player.createInstance({
       name: 'Lucas',
       playerId: uuidv1(),
       email: 'lucas@gmail.com',

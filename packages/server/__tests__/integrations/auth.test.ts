@@ -2,7 +2,7 @@ import request from 'supertest';
 import { v1 as uuidv1 } from 'uuid';
 
 import app from '../../src/app';
-import Player from '../../src/app/models/Player';
+import * as Player from '../../src/app/models/Player';
 import { app_secret } from '../../src/config';
 import generateToken from '../utils/generateToken';
 const truncate = require('../utils/truncate');
@@ -13,7 +13,7 @@ describe('Authentication', () => {
   }, 5000)
 
   it('should authenticate with valid credentials', async () => {
-    const player = await Player.create({
+    const player = await Player.createInstance({
       playerId: uuidv1(),
       name: 'Player1',
       email: 'p1@gmail.com',
@@ -31,7 +31,7 @@ describe('Authentication', () => {
   });
 
   it('should not authenticate with invalid credentials', async () => {
-    const player = await Player.create({
+    const player = await Player.createInstance({
       playerId: uuidv1(),
       name: 'Player2',
       email: 'p2@gmail.com',
@@ -49,7 +49,7 @@ describe('Authentication', () => {
   })
 
   it('should return JWT token when authenticated', async () => {
-    const player = await Player.create({
+    const player = await Player.createInstance({
       playerId: uuidv1(),
       name: 'Player3',
       email: 'p3@gmail.com',
@@ -67,7 +67,7 @@ describe('Authentication', () => {
   })
 
   it('should be able to access private routes when authenticated', async () => {
-    const player = await Player.create({
+    const player = await Player.createInstance({
       playerId: uuidv1(),
       name: 'Player4',
       email: 'p4@gmail.com',
