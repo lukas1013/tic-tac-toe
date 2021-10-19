@@ -7,7 +7,7 @@ import generateToken from './utils/generateToken';
 
 class AuthController {
   async signUp(req: Request, res: Response) {
-    const { email, name, password } = req.params;
+    const { email, name, password } = req.body;
     
     if (!email && !password) {
       //creates a guest

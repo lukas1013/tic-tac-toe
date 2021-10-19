@@ -2,8 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { validate } from "isemail";
 
 export default (req: Request, res: Response, next: NextFunction) => {
-  const { email, password, name } = req.params;
-  console.log(req.params)
+  const { email, password, name } = req.body;
   
   //if any is missing
   if (!email || !password || !name) {

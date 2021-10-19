@@ -10,21 +10,35 @@ describe('SignIn', () => {
 
   it('should create player with valid credentials', async () => {
     const response = await request(app)
-      .post('/auth/signup/John/Titor@gmail.com/20362036')
+      .post('/auth/signup')
+      .send({
+        name: 'John',
+        email: 'Titor@gmail.com',
+        password: '20362036'
+      })
 
     expect(response.body).toHaveProperty('token')
   })
 
   it('should not create player with invalid email', async () => {
     const response = await request(app)
-      .post('/auth/signup/Mcfly/ka1@&.com/20001918')
+      .post('/auth/signup')
+      .send({
+        name: 'Mcfly',
+        email: 'ka1@&.com',
+        password: '20001918'
+      })
 
     expect(response.status).toBe(400)
   })
 
   it('should not create player without required params', async () => {
     const response = await request(app)
-      .post('/auth/signup/Connor/con@gmail.com')
+      .post('/auth/signup')
+      .send({
+        name: 'Connor',
+        email: 'con@gmail.com'
+      })
 
     expect(response.status).toBe(400)
   })
