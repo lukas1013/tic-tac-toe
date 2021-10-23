@@ -4,16 +4,24 @@
   --color-black-olive: #353734;
   --color-emerald: #3BC480;
   --color-white: #FFF;
+  --color-violet-ryb: #7F0799;
+  --color-d-grey: #575757;
+}
+
+html,
+body,
+#root {
+  height: 100%;
 }
 
 html,
 body {
   width: 100%;
-  height: 100%;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-size: 62.5%;
+  background-color: var(--color-white);
 }
 
 body {
@@ -25,10 +33,26 @@ body {
 
 #root {
   width: 100%;
-  height: 100%;
-  display: flex;
-  flex-flow: row wrap;
-  align-content: space-between;
   box-sizing: border-box;
-  overflow-y: auto;
+  max-width: 800px;
+  margin: 0 auto;
+  overflow: auto;
+}
+
+* {
+  user-select: none;
+}
+
+a:visited {
+  color: initial;
+}
+
+button.rusty-red {
+  color: var(--color-white);
+  background-color: var(--color-rusty-red);
+  box-shadow: 0 2px 5px rgba(53, 9, 14, .5);
+}
+
+button.rusty-red:hover {
+  box-shadow: none;
 }
