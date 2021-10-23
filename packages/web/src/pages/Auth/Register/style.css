@@ -1,0 +1,79 @@
+form#register {
+  flex: 1 0 content;
+  display: grid;
+  grid-template: 
+    "pname pname pname" 1fr
+    "ipt_pnname ipt_pnname ipt_pnname" 1fr
+    "cbox guest ." .7fr
+    "email email email" 1fr
+    "e_ipt e_ipt e_ipt" 1fr
+    "pass pass p_ipt" 1fr
+    "cpass cpass cp_ipt" 1fr
+    /24px 1fr 50%;
+  grid-template-rows: repeat(auto-fit,1fr);
+}
+
+#register label {
+  align-self: flex-end;
+  grid-column: span 3;
+}
+
+#register input {
+  align-self: flex-start;
+  grid-column: span 3;
+  margin-bottom: 6%;
+  transition: all .1s;
+}
+
+#is-guest-checkbox {
+  width: 2rem;
+  height: 2rem;
+  fill: transparent;
+  stroke: var(--color-white);
+  stroke-width: 3px;
+  border-radius: .2rem;
+  box-sizing: border-box;
+  align-self: center;
+  grid-column: span 1;
+}
+
+#is-guest-checkbox.checked {
+  background-color: var(--color-rusty-red);
+}
+
+#is-guest-checkbox.unset {
+  background-color: var(--color-white);
+  border: .2rem solid var(--color-d-grey);
+}
+
+#auth label[for='is-guest-checkbox'] {
+  width: fit-content;
+  line-height: 1.6rem;
+  margin-left: 2%;
+  align-self: center;
+  grid-column: span 1;
+}
+
+#register label[for="password"], #register label[for="confirm-pass"] {
+  align-self: center;
+  grid-column: span 2;
+  margin-bottom: 5%;
+}
+
+#register #password, #register #confirm-pass {
+  align-self: center;
+  grid-column: span 1;
+}
+
+#register button {
+  align-self: flex-end;
+  grid-column: span 3;
+  justify-self: center;
+  margin: 6% 0;
+}
+
+#link-login {
+  align-self: flex-end;
+  justify-self: center;
+  grid-column: span 3;
+}

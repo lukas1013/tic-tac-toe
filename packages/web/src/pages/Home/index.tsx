@@ -1,20 +1,27 @@
-import React from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 
 import './style.css';
 
 import PlayerIcon from "../../components/PlayerIcon";
 
+import * as storage from '../../shared/storage';
+
 export default function Home(): JSX.Element {
+  const [guest, setGuest] = useState('Guest49208439201')
+  const [player, setPlayer] = useState(storage.retrieve('player'))
+
   return (
-    <>
+    <main id="home">
       <header>
         <div className="content">
-          <PlayerIcon/>
-          <span id="user-name">Guest49208439201</span>
+          <PlayerIcon />
+          <span id="user-name">{player?.name || guest}</span>
 
-          <span id="level">
-            lvl1
+          <span id="level">lvl
+            {
+              player?.level || '1'
+            }
           </span>
 
           <span id="score-text">
@@ -22,32 +29,59 @@ export default function Home(): JSX.Element {
           </span>
 
           <span id="player-score">
-            0
+            {
+              player?.score || 0
+            }
           </span>
         </div>
       </header>
 
       <nav className="button-container">
-        <button className='home'>
-          Play as Guest
-        </button>
+        {!player &&
+          <Link to={`/`}>
+            <button className='home rusty-red'>
+              Play as Guest
+            </button>
+          </Link>}
 
-        <button className='home'>
-          Create Account
-        </button>
+        {player && <button className='home rusty-red'>
+          Play
+        </button>}
 
-        <button className='home'>
-          Login
-        </button>
+        {!player &&
+          <Link to={`/register`}>
+            <button className='home rusty-red'>
+              Create Account
+            </button>
+          </Link>}
 
-        <button className='home'>
-          Rank
-        </button>
+        {!player &&
+          <Link to={'/login'}>
+            <button className='home rusty-red'>
+              Login
+            </button>
+          </Link>}
 
-        <button className='home'>
-          Settings
-        </button>
+        <Link to={`/`}>
+          <button className='home rusty-red'>
+            Rank
+          </button>
+        </Link>
+
+        <Link to={`/`}>
+          <button className='home rusty-red'>
+            Settings
+          </button>
+        </Link>
+
+        {player &&
+          <button className='home rusty-red' onClick={() => {
+            storage.deleteAll()
+            setPlayer(null)
+          }}>
+            Sair
+          </button>}
       </nav >
-    </>
+    </main>
   )
 }

@@ -7,6 +7,7 @@ const TerserWebpackPlugin = require('terser-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = env => {
   const isProductionEnv = env.NODE_ENV === 'production';
@@ -121,6 +122,9 @@ module.exports = env => {
         }
       }),
       new CssMinimizerPlugin(),
+      new Dotenv({
+        path: env.NODE_ENV === 'production' ? './.env' : './.env.dev'
+      })
     ].filter(Boolean),
     optimization: {
       chunkIds: isProductionEnv ? 'size' : 'named',

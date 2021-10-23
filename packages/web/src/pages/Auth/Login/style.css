@@ -1,0 +1,23 @@
+form#login {
+  flex: 0 0 content;
+  margin: auto;
+  padding-bottom: 10%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#login input {
+  margin: 2% 0 10%;
+}
+
+#login button {
+  margin: 0 10% 3%;
+}
+
+#login #link-register {
+  display: inline-block;
+  width: fit-content;
+  height: auto;
+  margin: auto;
+}
+
