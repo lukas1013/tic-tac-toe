@@ -18,7 +18,6 @@ A multiplayer tic-tac-toe using monorepo architecture
 
 * Node
   * Express
-  * Typescript
   * MySQL
 
 ### [Mobile](packages/mobile)
