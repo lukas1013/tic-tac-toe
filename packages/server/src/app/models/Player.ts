@@ -1,4 +1,4 @@
-import { Sequelize, Model, Optional, DataTypes } from "sequelize"
+import { Sequelize, Model, Optional, DataTypes, Op, FindOptions } from "sequelize"
 import bcrypt from 'bcryptjs';
 import { v1 as uuidv1 } from 'uuid';
 
@@ -104,7 +104,8 @@ async function checkPassword(password: string, passwordHash: string) {
 
 interface findPlayerInterface {
   attributes?: Array<'playerId' | 'name' | 'email' | 'score' | 'level' | 'password' | 'isGuest'>,
-  where?: Optional<PlayerInterface, 'name' | 'email' | 'password'>
+  where?: Optional<PlayerInterface, 'name' | 'email' | 'password'>,
+  orOperator?: true | false
 }
 
 async function createInstance(player: PlayerInterface | findPlayerInterface | Optional<PlayerInterface, "password" | "email" | "playerId" | "score" | "level">, isGuest: true | false = false): Promise<PlayerInstance | null> {
@@ -121,7 +122,12 @@ async function createInstance(player: PlayerInterface | findPlayerInterface | Op
   }
 
   if ('attributes' in player) {
-    const _player = await Player.findOne(player)
+    const _player = await Player.findOne(player.orOperator ? {
+      attributes: player.attributes,
+      where: {
+        [Op.or]: player.where
+      }
+    } as FindOptions : player)
     return _player
   }
 

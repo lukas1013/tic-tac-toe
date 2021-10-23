@@ -7,19 +7,19 @@
     "pretest": "clear && NODE_ENV=test sequelize db:migrate",
     "test": "NODE_ENV=test jest --detectOpenHandles",
     "posttest": "NODE_ENV=test sequelize db:migrate:undo:all",
-    "start": "tsnd --transpile-only --respawn --ignore-watch [__tests__,node_modules] ./src/server.ts"
+    "start": "tsnd --transpile-only --respawn ./src/server.ts"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "isemail": "^3.2.0",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.0",
     "sequelize": "^6.7.0",
+    "socket.io": "^4.3.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

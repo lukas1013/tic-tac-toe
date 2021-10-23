@@ -22,6 +22,7 @@ module.exports = env => {
         {
           test: /\.(ts|js)x?$/,
           exclude: '/node_modules/',
+          include: path.resolve(__dirname, '../src'),
           use: {
             loader: 'babel-loader',
             options: {
@@ -73,7 +74,9 @@ module.exports = env => {
       ]
     },
     resolve: {
-      extensions: ['.tsx', '.ts', '.js', '.jsx']
+      extensions: ['.tsx', '.ts', '.js', '.jsx'],
+      symlinks: false,
+      cacheWithContext: false
     },
     output: {
       filename: 'static/js/[name].[contenthash:8].js',
@@ -154,7 +157,8 @@ module.exports = env => {
     stats: {
       moduleAssets: false,
       colors: true,
-      excludeModules: 'node_modules'
+      excludeModules: 'node_modules',
+      errorDetails: true
     }
   }
 }

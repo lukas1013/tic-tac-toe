@@ -3,13 +3,12 @@
   "compilerOptions": {
     "lib": ["DOM","DOM.Iterable","ESNext"],
     "outDir": "./build/",
-    "noImplicitAny": false,
+    // "noImplicitAny": false,
     "module": "es6",
     "target": "es5",
     "jsx": "react",
     "allowJs": true,
     "moduleResolution": "node",
-    "alwaysStrict": true,
     "allowSyntheticDefaultImports": true,
     // "esModuleInterop": true,
     "sourceMap": true,
@@ -19,8 +18,8 @@
     "forceConsistentCasingInFileNames": true
   },
   "exclude": [
-    "node_modules",
+    // "node_modules",
     "build"
   ],
-  "include": ["src"]
+  "include": ["src","config"]
 }

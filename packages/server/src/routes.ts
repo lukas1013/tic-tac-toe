@@ -7,8 +7,6 @@ import AuthController from "./app/controllers/auth";
 
 const router = Router()
 
-//validates email and password
-
 router.get('/', (request,response) => {
   response.json({ message: 'Hello World' })
 })

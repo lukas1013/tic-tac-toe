@@ -3,7 +3,7 @@ import request from 'supertest';
 import app from '../../src/app';
 const truncate = require('../utils/truncate');
 
-describe('SignIn', () => {
+describe('SignUp', () => {
   beforeEach(() => {
     truncate()
   }, 5000)

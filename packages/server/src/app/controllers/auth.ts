@@ -28,7 +28,12 @@ class AuthController {
 
     if (player) {
       return res.json({
-        player,
+        player: {
+          name: player.name,
+          email: player.email,
+          score: player.score,
+          level: player.level
+        },
         token: generateToken(player.playerId, app_secret)
       })
     }
@@ -37,24 +42,31 @@ class AuthController {
   }
 
   async signIn(req: Request, res: Response) {
-    const { email, password } = req.body;
+    const { user, password } = req.body;
+
     const player = await createInstance({
       attributes: [
-        'password', 'email', 'isGuest', 'level', 'score', 'name', 'playerId'
+        'email', 'isGuest', 'level', 'score', 'name', 'playerId', 'password'
       ],
-      where: { email }
+      where: { email: user, name: user },
+      orOperator: true
     })
 
     if (!player) {
       return res.status(401).send({ message: 'Player not found' })
     }
 
-    if (!(await checkPassword(password, player.getDataValue('password')))) {
+    if (!(await checkPassword(password, player.password))) {
       return res.status(401).send({ message: 'Incorrect password' })
     }
 
     return res.json({
-      player,
+      player: {
+        name: player.name,
+        email: player.email,
+        score: player.score,
+        level: player.level
+      },
       token: generateToken(player.playerId, app_secret)
     })
   }

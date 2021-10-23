@@ -5,7 +5,10 @@
     "noEmit": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "alwaysStrict": true
   }
 }
