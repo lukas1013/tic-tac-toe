@@ -79,7 +79,8 @@ module.exports = env => {
       chunkFilename: 'static/js/[id].[chunkhash:8].chunk.js',
       assetModuleFilename: 'static/media/[hash:8][ext][query]',
       path: isProductionEnv ? path.resolve(__dirname, '..', 'build') : path.resolve(__dirname, '..', 'dist'),
-      clean: true
+      clean: true,
+      publicPath: '/'
     },
     performance: {
       hints: 'warning'
@@ -95,8 +96,9 @@ module.exports = env => {
           errors: false,
           warnings: false
         },
-        progress: true
+        progress: true,
       },
+      historyApiFallback: true
     },
     plugins: [
       new WebpackManifestPlugin(),
