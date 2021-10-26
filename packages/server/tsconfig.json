@@ -2,18 +2,11 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "ESNext",
-    // "module": "commonjs",
-    // "esModuleInterop": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
     "allowJs": true,
-    "rootDir": "./src",
-    // "outDir": "./build",
-    // "skipLibCheck": true,
-    "removeComments": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    // "resolveJsonModule": true,
+    "rootDir": ".",
+    "strictNullChecks": false,
     "allowSyntheticDefaultImports": true
   },
   "include": ["src"]

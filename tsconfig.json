@@ -1,12 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "CommonJS",
+    "target": "es5",
+    "module": "ES6",
     "noEmit": true,
     "resolveJsonModule": true,
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
+    "allowJs": true,
     "noImplicitAny": false,
     "strictNullChecks": true,
     "alwaysStrict": true
