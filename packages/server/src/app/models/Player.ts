@@ -146,4 +146,4 @@ async function createInstance(player: PlayerInterface | findPlayerInterface | Op
   return null
 }
 
-export { createInstance, checkPassword };
+export { createInstance, checkPassword, Player as default };

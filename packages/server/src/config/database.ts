@@ -1,6 +1,5 @@
-import { Dialect } from "sequelize/types";
-
-const config = require('../config');
+import { Dialect } from 'sequelize/types';
+import config from '../config';
 const { db } = config;
 
 type databaseConfig = {
@@ -9,8 +8,11 @@ type databaseConfig = {
   password: string,
   database: string,
   dialect: Dialect,
-  operatorsAliases: 0 | 1,
   logging: true | false,
+  ssl?: true | false,
+  dialectOptions: {
+    ssl?: true | false
+  },
   define: {
     timestamps: true | false,
     underscored: true | false,
@@ -23,9 +25,12 @@ const dbConfig: databaseConfig = {
   username: db.user,
   password: db.pass,
   database: db.name,
-  dialect: db.dialect || 'mysql',
-  operatorsAliases: 0,
+  dialect: db.dialect as 'mysql' | 'mariadb',
   logging: false,
+  ssl: config.environment === 'production' ? true :false,
+  dialectOptions: {
+    ssl: config.environment === 'production' ? true :false
+  },
   define: {
     timestamps: true,
     underscored: true,
