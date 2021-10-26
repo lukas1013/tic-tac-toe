@@ -10,7 +10,12 @@ module.exports = {
     '<rootDir>/__tests__/coverage'
   ],
   collectCoverage: true,
-  collectCoverageFrom: ['src/**'],
+  // collectCoverageFrom - glob pattern
+  collectCoverageFrom: [
+    '**/*.{js,ts}',
+    //excludes
+    '!**/app/models/index.*'
+  ],
   coverageDirectory: '<rootDir>/__tests__/coverage',
-  testTimeout: 10000
+  testTimeout: 10000,
 }
