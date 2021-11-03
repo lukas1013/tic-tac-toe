@@ -1,7 +1,12 @@
 node_modules
 dist
 build
+.vscode
+
+#.env
 .env
+
+#test
 !.env.test
 coverage
 packages/server/__tests__/factories.js
