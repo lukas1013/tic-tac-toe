@@ -16,7 +16,17 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/prop-types": "off",
-    "@typescript-eslint/no-var-requires": "off"
+    "@typescript-eslint/no-var-requires": "off",
+    // removes warning from no-unused-vars in functions
+    /* "@typescript-eslint/no-unused-vars": ["warn", {
+      "vars": "all",
+      "args": "none",
+      "ignoreRestSiblings": false
+    }] */
+    "prefer-const": ["warn", {
+      "destructuring": "any",
+      "ignoreReadBeforeAssign": false
+    }]
   },
   "settings": {
     "react": {

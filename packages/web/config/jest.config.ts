@@ -11,6 +11,7 @@ module.exports = {
     '<rootDir>/__tests__/coverage',
     '<rootDir>/__tests__/utils/truncate',
   ],
+  // preset: 'ts-jest',
   collectCoverage: true,
   collectCoverageFrom: ['<rootDir>/src/**'],
   coverageDirectory: '<rootDir>/__tests__/coverage',

@@ -16,7 +16,7 @@ module.exports = env => {
     mode: env.NODE_ENV,
     entry: './src/index.tsx',
     context: path.resolve(__dirname, '..'),
-    devtool: isProductionEnv ? false : 'inline-source-map',
+    devtool: false,
     module: {
       rules: [
         {
@@ -61,7 +61,6 @@ module.exports = env => {
               loader: 'postcss-loader',
               options: {
                 postcssOptions: {
-                  sourceMap: true,
                   config: path.resolve(__dirname, 'postcss.config.js')
                 }
               }
@@ -82,6 +81,7 @@ module.exports = env => {
       filename: 'static/js/[name].[contenthash:8].js',
       chunkFilename: 'static/js/[id].[chunkhash:8].chunk.js',
       assetModuleFilename: 'static/media/[hash:8][ext][query]',
+      sourceMapFilename: 'static/maps/[name].js.map',
       path: isProductionEnv ? path.resolve(__dirname, '..', 'build') : path.resolve(__dirname, '..', 'dist'),
       clean: true,
       publicPath: '/'
@@ -125,6 +125,10 @@ module.exports = env => {
         }
       }),
       new CssMinimizerPlugin(),
+      new webpack.SourceMapDevToolPlugin({
+        exclude: ['vendors.chunk'],
+        test: /\.(ts|tsx|js|jsx|css)$/
+      }),
       new Dotenv({
         path: env.NODE_ENV === 'production' ? './.env' : './.env.dev'
       })
@@ -136,9 +140,6 @@ module.exports = env => {
       minimizer: [
         new TerserWebpackPlugin({
           exclude: /node_modules/,
-          terserOptions: {
-            sourceMap: true
-          }
         })
       ].filter(Boolean),
       splitChunks: {
