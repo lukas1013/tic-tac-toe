@@ -1,14 +1,10 @@
 #auth {
   width: 100%;
   height: 100%;
-  min-height: 100%;
   font-family: 'Source Sans Pro', sans-serif;
   background-color: var(--color-white);
   font-size: 1.6rem;
   color: var(--color-black-olive);
-  display: flex;
-  flex-flow: column nowrap;
-  align-content: center;
   box-sizing: border-box;
   overflow-y: auto;
 }
@@ -49,29 +45,50 @@
   vertical-align: top;
 }
 
-form#register, form#login {
+form#register,
+form#login {
   width: 90%;
   max-width: 430px;
-  justify-content: center;
+  align-content: center;
   box-sizing: border-box;
-  padding: 2%;
-  margin: 0;
+  margin: 0 auto;
+  display: flex;
+  flex-flow: column wrap;
   align-self: center;
 }
 
-#auth label {
+#auth fieldset {
   width: 100%;
-  padding: 1.4%;
+  height: fit-content;
+  padding: 0;
+  border: none;
+  margin: 2vmin 0;
+  display: flex;
+  flex-flow: row wrap;
+  position: relative;
+  flex: 0 0 content;
 }
 
-#auth #register label:not(label[for="is-guest-checkbox"])::after {
+#auth label {
+  flex: 0 0 content;
+  padding: 1.4% 0;
+}
+
+fieldset:not(:disabled) label:not(label[for="is-guest-checkbox"])::after {
   content: ' *';
   color: red;
   font-size: 1.7rem;
+  height: auto;
+}
+
+#auth .icon {
+  position: absolute;
+  z-index: 99;
+  font-size: 1.8rem;
+  padding: 1% 0;
 }
 
 #auth input {
-  border: none;
   border-width: .14rem;
   border-style: solid;
   border-color: #858585;
@@ -79,13 +96,12 @@ form#register, form#login {
   outline: none;
   color: var(--color-grey);
   width: 100%;
-  padding: 1%;
-  text-indent: 2%;
+  padding: .5rem;
   border-radius: .4rem;
   line-height: 2rem;
   font-size: 1.4rem;
   font-family: 'PT Serif', serif;
-  box-shadow: none;
+  transition: border .1s;
 }
 
 #auth input:focus {
@@ -93,7 +109,7 @@ form#register, form#login {
 }
 
 #auth input:disabled {
-  border: none;
+  border-color: transparent;
   background-color: rgba(53, 55, 52, .1);
 }
 
@@ -107,16 +123,33 @@ form#register, form#login {
 
 #auth input:not(:placeholder-shown):not(:focus):invalid {
   background-color: rgba(220, 46, 66, .3);
-  border: none;
 }
+
+#auth p.error {
+  color: #ed0000;
+  font-size: 1.3rem;
+  margin: 0;
+  height: 1.5rem;
+  box-sizing: border-box;
+  flex: 1 0 80%;
+}
+
+#auth p.error.hidden,
+#auth input:disabled + p.error,
+#confirm-pass:valid + #confirm-pass-error:valid
+{
+  visibility: hidden;
+}
+
 
 #auth button {
   border: none;
   border-radius: .3rem;
   padding: 3% 0;
   box-sizing: border-box;
-  width: 80%;
+  width: 60%;
   font-weight: 600;
+  align-self: center;
 }
 
 #auth button:hover {
@@ -126,10 +159,10 @@ form#register, form#login {
 }
 
 #auth #link {
-  align-self: flex-end;
-  justify-self: center;
-  grid-column: span 3;
+  align-self: center;
+  justify-self: flex-end;
   font-size: 1.4rem;
+  margin: 4% 0 0;
 }
 
 #auth #link-login, #auth #link-register {
@@ -138,6 +171,10 @@ form#register, form#login {
 }
 
 @media only screen and (min-width: 500px) {
+  #auth form#register fieldset {
+    margin: 1.6vmin 0;
+  }
+
   #auth input {
     border-width: .2rem;
   }

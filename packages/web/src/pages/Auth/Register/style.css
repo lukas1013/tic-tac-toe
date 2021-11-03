@@ -1,28 +1,24 @@
 form#register {
-  flex: 1 0 content;
-  display: grid;
-  grid-template: 
-    "pname pname pname" 1fr
-    "ipt_pnname ipt_pnname ipt_pnname" 1fr
-    "cbox guest ." .7fr
-    "email email email" 1fr
-    "e_ipt e_ipt e_ipt" 1fr
-    "pass pass p_ipt" 1fr
-    "cpass cpass cp_ipt" 1fr
-    /24px 1fr 50%;
-  grid-template-rows: repeat(auto-fit,1fr);
+  flex: 0 0 content;
+  overflow-y: auto;
 }
 
-#register label {
-  align-self: flex-end;
-  grid-column: span 3;
+form#register fieldset {
+  min-width: min-content;
+}
+
+#register .icon {
+  top: 45%;
+  left: 1vmin;
 }
 
 #register input {
-  align-self: flex-start;
-  grid-column: span 3;
-  margin-bottom: 6%;
-  transition: all .1s;
+  text-indent: calc(1vmin + 1.3rem);
+}
+
+#register #cb-container {
+  margin: 1vmin 0;
+  width: 30%;
 }
 
 #is-guest-checkbox {
@@ -33,8 +29,8 @@ form#register {
   stroke-width: 3px;
   border-radius: .2rem;
   box-sizing: border-box;
-  align-self: center;
-  grid-column: span 1;
+  vertical-align: middle;
+  margin: 0 3% 0 1%;
 }
 
 #is-guest-checkbox.checked {
@@ -43,37 +39,28 @@ form#register {
 
 #is-guest-checkbox.unset {
   background-color: var(--color-white);
-  border: .2rem solid var(--color-d-grey);
+  border: var(--color-d-grey) .2rem solid;
 }
 
-#auth label[for='is-guest-checkbox'] {
+#register #cb-label {
   width: fit-content;
   line-height: 1.6rem;
-  margin-left: 2%;
-  align-self: center;
-  grid-column: span 1;
-}
-
-#register label[for="password"], #register label[for="confirm-pass"] {
-  align-self: center;
-  grid-column: span 2;
-  margin-bottom: 5%;
+  vertical-align: middle;
 }
 
 #register #password, #register #confirm-pass {
-  align-self: center;
-  grid-column: span 1;
+  width: 65%;
+  margin-right: 35%;
 }
 
+#confirm-pass:focus + #confirm-pass-error {
+   visibility: hidden;
+ }
+
 #register button {
-  align-self: flex-end;
-  grid-column: span 3;
-  justify-self: center;
-  margin: 6% 0;
+  margin-top: 2vmin;
 }
 
 #link-login {
-  align-self: flex-end;
   justify-self: center;
-  grid-column: span 3;
 }

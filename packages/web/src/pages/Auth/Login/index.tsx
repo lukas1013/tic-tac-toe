@@ -1,57 +1,96 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { FiUser, FiEye, FiEyeOff } from 'react-icons/fi';
+import { BiLockAlt } from 'react-icons/bi';
 
 import './style.css';
 
-import api from '../../../services/api';
-import * as storage from '../../../shared/storage';
+// type typeState = {
+//   user?: string;
+//   password?: string;
+// }
 
-export default function Login() {
-  const history = useHistory();
-  const [user, setUser] = useState('');
-  const [password, setPassword] = useState('')
+// type typeProps = {
+//   state: typeState | undefined;
+//   login: (() => void);
+//   formErrors: {
+//     userName?: string;
+//     email?: string;
+//     password?: string;
+//   },
+//   validateInputValue: ((input: string, value: string | undefined) => void),
+//   setInputValue: ((input: string, value: string) => void)
+// }
 
-  function login() {
-    api.post('/auth/signin', {
-      user,
-      password
-    }).then(response => {
-      const { player, token } = response.data as { player: Record<string, unknown>, token: string };
-      //stores in localStorage
-      storage.save(['player','token'], [player,token]);
-      //redirects to home
-      history.replace('/')
-    }).catch(e => {
-      console.log(e)
-    })
-  }
+export default function Login({ state, login, formErrors: loginError, validateInputValue: validateInput, setInputValue }): JSX.Element {
+  const [shouldShowPass, setSSP] = useState(false)
+  const isEmail = useMemo(() => /^[#!%$‘&+*–/=?\^`{|}~\.\w]{1,64}@[\w-\.]*$/.test(state.user || ''), [state.user]);
 
   return (
     <form id="login">
-      <label htmlFor="user">Username or email</label>
+      <label htmlFor="user">Player or email</label>
+      <FiUser className="icon" role="presentation" />
+
       <input
         type="text"
         id="user"
         required
-        value={user}
-        pattern="[\w0-9_]+|^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
-        title="your player name or registered email"
+        maxLength={128}
+        inputMode="email"
+        autoComplete={isEmail ? "email" : 'username'}
+        onBlur={() => {
+          if (isEmail) {
+            validateInput('email', state.user)}
+          }
+        }
+        pattern="^[a-zA-Z0-9_]+|[^\.@]([#!%$‘&+*–/=?\^`{|}~\.\w](?!\.\.)){0,64}@[\w\.-]{0,63}[^-\.]$"
+        title="your registered player name or email address"
         placeholder=" "
-        onChange={e => setUser(e.target.value)}
+        onChange={e => {
+          setInputValue(isEmail ? 'email' : 'userName', e.target.value)
+          if (!isEmail) {
+            validateInput('userName', e.target.value)
+          }
+        }}
+        value={state.userName ?? state.email}
       />
 
+      <p id="user-error"
+        className={!loginError?.[isEmail ? 'email' : 'userName'] ? "error hidden" : "error"}>{
+          loginError?.[isEmail ? 'email' : 'userName']
+        }
+      </p>
+
       <label htmlFor="password">Password</label>
+      <BiLockAlt id="lock" className="icon" role="presentation" />
+
       <input
-        type="password"
+        type={shouldShowPass ? "text" : "password"}
         id="password"
         required
         maxLength={30}
+        minLength={8}
         title="your login password"
-        pattern="[a-zA-Z0-9]{8,}"
+        pattern="[a-zA-Z0-9]{8,30}"
         placeholder=" "
-        onChange={e => setPassword(e.target.value)}
+        autoComplete="current-password"
+        onChange={e => {
+          setInputValue('password', e.target.value)
+          validateInput('password', e.target.value)
+        }}
+        value={state.password}
       />
+
+      <p id="password-error"
+        className={!loginError?.password ? "error hidden" : "error"}>{
+          loginError?.password
+        }
+      </p>
+
+      {shouldShowPass && <FiEye className="icon eye" onClick={() => setSSP(false)} role="presentation" />}
+
+      {!shouldShowPass && <FiEyeOff className="icon eye" onClick={() => setSSP(true)} role="presentation" />}
+
 
       <button className="rusty-red" type="button" onClick={login}>Login</button>
 
