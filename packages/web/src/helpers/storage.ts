@@ -10,19 +10,19 @@ type Player = {
 
 export function save(...[entry, value]: [entry: string, value: string] | [entry: Array<string>, value: Array<string | Record<string, unknown>>]): void {
   if (typeof entry === 'string' && typeof value === 'string') {
-    storage.setItem(entry,value)
+    storage.setItem(entry, value)
   } else if (Array.isArray(entry)) {
     entry.forEach((item, index) => {
       storage.setItem(item, typeof value[index] === 'object' ? JSON.stringify(value[index]) : value[index] as string)
     });
   }
 }
-
 export function retrieve(entry: 'player'): Player | null;
-export function retrieve(entry: 'player' | 'token' | Array<string>): Player | string | Array<string | Player> | null {
+export function retrieve(entry: 'token'): string | null;
+export function retrieve(entry: string[] | 'player' | 'token'): Array<string | Player> | Player | string | null {
   if (typeof entry === 'string') {
-    const res = storage.getItem(entry)
-    return (entry === 'player' && res) ? JSON.parse(res) : res; 
+    const stored = storage.getItem(entry)
+    return (entry === 'player' && stored) ? JSON.parse(stored) : stored;
   }
 
   return entry.map(item => {

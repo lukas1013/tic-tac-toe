@@ -21,6 +21,8 @@ body {
   padding: 0;
   box-sizing: border-box;
   font-size: 62.5%;
+  max-height: 100vh;
+  overflow: auto;
   background-color: var(--color-white);
 }
 
@@ -37,9 +39,8 @@ body {
   max-width: 800px;
   margin: 0 auto;
   overflow: auto;
-}
-
-* {
+  display: flex;
+  flex-direction: column;
   user-select: none;
 }
 
