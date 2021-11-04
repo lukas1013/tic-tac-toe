@@ -79,7 +79,7 @@ export default function Home(): JSX.Element {
             storage.deleteAll()
             setPlayer(null)
           }}>
-            Sair
+            Exit
           </button>}
       </nav >
     </main>

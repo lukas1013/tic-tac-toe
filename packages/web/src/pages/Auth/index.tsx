@@ -4,15 +4,14 @@ import { FiChevronLeft } from 'react-icons/fi';
 
 import './style.css';
 
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth, typeInput } from "../../contexts/AuthContext";
 import authReducer from "./reducer";
 
 const Register = React.lazy(() => import("./Register"));
 const Login = React.lazy(() => import("./Login"));
 
-type typeInput = 'userName' | 'email' | 'password' | 'confirmPass' | 'isGuest';
 type typeValidateInputValue = ((input: Exclude<typeInput, 'isGuest'>, value: string) => void)
-type typeSetInputValue = ((input: typeInput, value: string | boolean) => void)
+type typeSetInputValue = ((input: Exclude<typeInput, 'isGuest'>, value: string | boolean) => void)
 
 interface Props {
   state: {
@@ -34,7 +33,7 @@ interface RegisterProps extends Props {
 }
 
 export default function Auth(): JSX.Element {
-  const { formErrors, submit, validateInput, clearErrors } = useAuth();
+  const { formErrors, submit, validateInput } = useAuth();
   const location = useLocation()
   const { guest } = useParams<{ guest: string }>();
   const form = useMemo(() => {

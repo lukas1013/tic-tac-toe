@@ -8,7 +8,7 @@ import api from '../services/api';
 import * as storage from '../helpers/storage';
 
 
-type typeInput = 'userName' | 'email' | 'password' | 'confirmPass';
+export type typeInput = 'userName' | 'email' | 'password' | 'confirmPass';
 
 interface AuthError {
   [index: string]: {
@@ -86,7 +86,7 @@ export const AuthProvider = ({ children }: { children: JSX.Element }): JSX.Eleme
     }
   }, [authError])
 
-  const getInputValidation = useCallback<typegetInputValidation>((inputs, values, isSubmit = false) => {
+  const getInputValidation = useCallback<typeGetInputValidation>((inputs, values, isSubmit = false) => {
     const _authError = getObjectCopy(authError) as AuthError
     let _isValid: boolean, invalidCode: string, lengthCode: string, requiredCode: string
 
@@ -194,10 +194,8 @@ export const AuthProvider = ({ children }: { children: JSX.Element }): JSX.Eleme
     register(_entries as { name: string, email?: string, password?: string, isGuest?: boolean })
   }, [canSubmit, login, register])
 
-  const clearErrors = useCallback(() => setAuthError({}), [])
-
   return (
-    <AuthContext.Provider value={{ formErrors, submit, validateInput: getInputValidation, clearErrors }}>{
+    <AuthContext.Provider value={{ formErrors, submit, validateInput: getInputValidation }}>{
       children
     }</AuthContext.Provider>
   )
