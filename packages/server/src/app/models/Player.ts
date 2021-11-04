@@ -1,8 +1,8 @@
-import { Sequelize, Model, Optional, DataTypes, Op, FindOptions } from "sequelize"
+import { Model, Optional, DataTypes, Op, FindOptions } from "sequelize"
 import bcrypt from 'bcryptjs';
 import { v1 as uuidv1 } from 'uuid';
 
-import database from '../../config/database';
+import sequelize from '../../database';
 
 interface PlayerInterface {
   id?: string;
@@ -22,11 +22,6 @@ interface PlayerInterface {
 interface PlayerCreationAttributes extends Optional<PlayerInterface, "id" | "email" | "password" | "score" | "level" | "updatedAt" | "createdAt"> { }
 
 interface PlayerInstance extends Model<PlayerInterface, PlayerCreationAttributes>, PlayerInterface { }
-
-const sequelize = new Sequelize(database.database, database.username, database.password, {
-  dialect: database.dialect,
-  define: database.define
-})
 
 const Player = sequelize.define<PlayerInstance>("Player", {
   id: {
@@ -66,12 +61,8 @@ const Player = sequelize.define<PlayerInstance>("Player", {
     type: DataTypes.VIRTUAL,
     defaultValue: false
   },
-  passwordHash: {
-    type: DataTypes.VIRTUAL
-  },
-  passwordMatches: {
-    type: DataTypes.VIRTUAL
-  },
+  passwordHash: DataTypes.VIRTUAL,
+  passwordMatches: DataTypes.VIRTUAL,
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,
