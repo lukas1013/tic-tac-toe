@@ -52,6 +52,11 @@ button.rusty-red {
   color: var(--color-white);
   background-color: var(--color-rusty-red);
   box-shadow: 0 2px 5px rgba(53, 9, 14, .5);
+  outline: none;
+}
+
+button.rusty-red:focus {
+  outline: var(--color-violet-ryb) solid .1rem;
 }
 
 button.rusty-red:hover {

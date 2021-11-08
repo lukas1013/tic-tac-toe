@@ -5,10 +5,9 @@ type Player = {
   email: string;
   level: string;
   score: string;
-  isGuest?: true | false
 }
 
-export function save(...[entry, value]: [entry: string, value: string] | [entry: Array<string>, value: Array<string | Record<string, unknown>>]): void {
+export function save(...[entry, value]: [entry: string, value: string] | [entry: Array<string>, value: Array<string | Player>]): void {
   if (typeof entry === 'string' && typeof value === 'string') {
     storage.setItem(entry, value)
   } else if (Array.isArray(entry)) {

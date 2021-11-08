@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 import isValid from "./utils/checkInput";
@@ -6,7 +6,7 @@ import errorsCode from './utils/errorsCode';
 import { getObjectCopy } from "../utils";
 import api from '../services/api';
 import * as storage from '../helpers/storage';
-
+import socket from "../socket";
 
 export type typeInput = 'userName' | 'email' | 'password' | 'confirmPass';
 
@@ -21,26 +21,45 @@ type typeInputError = {
   [typeInput: string]: string
 }
 
-type typegetInputValidation = (input: typeInput[], value: string[], isSubmit?: boolean) => AuthError;
+export type typeGetInputValidation = (input: typeInput[], value: string[], isSubmit?: boolean) => AuthError;
 type typeAddError = (...args: [type: 'length', input: 'password', authError?: AuthError] | [type: 'invalid' | 'required', input: typeInput, authError?: AuthError]) => void;
 type typeGetErrors = (inputs?: Array<typeInput>) => typeInputError;
 type typeCanSubmit = (entries: { userName?: string, email?: string, password?: string, confirmPass?: string, isGuest?: boolean }, isLogin: boolean) => boolean;
 type typeSubmit = (entries: { userName?: string, email?: string, password: string, isGuest?: boolean }, form: 'login' | 'register') => void;
 
-interface contextProps {
-  validateInput: typegetInputValidation;
-  formErrors: typeInputError;
-  submit: typeSubmit;
-  clearErrors: (() => void)
+export interface Player {
+  name: string;
+  email: string;
+  score: string;
+  level: string;
 }
 
-const AuthContext = createContext({} as contextProps)
+interface contextProps {
+  validateInput: typeGetInputValidation;
+  formErrors: typeInputError;
+  submit: typeSubmit;
+  logged: boolean;
+  player: Player | null;
+  logout: (() => void)
+}
 
-export const AuthProvider = ({ children }: { children: JSX.Element }): JSX.Element => {
+type typeChildren = Array<JSX.Element | null | boolean>
+
+const AuthContext = createContext({ logged: storage.retrieve('token') ? true : false, player: storage.retrieve('player') } as contextProps)
+
+export const AuthProvider = ({ children }: { children: typeChildren }): JSX.Element => {
   const [authError, setAuthError]: [AuthError, React.Dispatch<React.SetStateAction<AuthError>>] = useState({})
   const [formErrors, setFormErrors] = useState({} as typeInputError)
+  const [logged, setLogged] = useState(storage.retrieve('token') ? true : false)
+  const [player, setPlayer] = useState(logged ? storage.retrieve('player') : null)
   const history = useHistory()
 
+  useEffect(() => {
+    if (logged) {
+      socket.emit('online')
+    }
+  }, [logged])
+  
   const getErrors = useCallback<typeGetErrors>((inputs = ['userName', 'email', 'password', 'confirmPass']): typeInputError => {
     const _authError = authError;
     const errors = {};
@@ -61,7 +80,7 @@ export const AuthProvider = ({ children }: { children: JSX.Element }): JSX.Eleme
   useEffect(() => {
     setFormErrors(getErrors())
   }, [getErrors])
-  
+
   const addError = useCallback<typeAddError>((...args) => {
     const _authError = args[2] || getObjectCopy(authError) as AuthError
 
@@ -100,10 +119,10 @@ export const AuthProvider = ({ children }: { children: JSX.Element }): JSX.Eleme
       // required
       if (isSubmit && !values[key].length && !(requiredCode in _authError)) {
         addError('required', inputs[key], _authError)
-      } else if (values[key].length && requiredCode in _authError) {    
+      } else if (values[key].length && requiredCode in _authError) {
         delete _authError[requiredCode]
       }
-      
+
       // invalid
       if (!_isValid && !(invalidCode in _authError)) {
         addError('invalid', inputs[key], _authError)
@@ -146,9 +165,11 @@ export const AuthProvider = ({ children }: { children: JSX.Element }): JSX.Eleme
     api.post('/auth/signin', {
       ...entries
     }).then(response => {
-      const { player, token } = response.data as { player: Record<string, unknown>, token: string };
+      const { player, token } = response.data as { player: Player, token: string }
       //stores in localStorage
       storage.save(['player', 'token'], [player, token]);
+      setLogged(true)
+      setPlayer(player)
       //redirects to home
       history.replace('/')
     }).catch(e => {
@@ -156,14 +177,21 @@ export const AuthProvider = ({ children }: { children: JSX.Element }): JSX.Eleme
     })
   }, [history])
 
+  const logout = useCallback(() => {
+    storage.deleteAll()
+    setLogged(false)
+    setPlayer(null)
+  }, [])
 
-  const register = useCallback((entries: { name: string, email?: string, password?: string, isGuest?: boolean } ) => {
+  const register = useCallback((entries: { name: string, email?: string, password?: string, isGuest?: boolean }) => {
     api.post('/auth/signup', {
       ...entries
     }).then(response => {
-      const { player, token } = response.data as { player: Record<string, unknown>, token: string };
+      const { player, token } = response.data as { player: Player, token: string }
       //stores in localStorage
       storage.save(['player', 'token'], [player, token]);
+      setLogged(true)
+      setPlayer(player)
       //redirects to home
       history.replace('/')
     }).catch(e => {
@@ -194,8 +222,10 @@ export const AuthProvider = ({ children }: { children: JSX.Element }): JSX.Eleme
     register(_entries as { name: string, email?: string, password?: string, isGuest?: boolean })
   }, [canSubmit, login, register])
 
+  const contextValue = useMemo(() => ({ formErrors, submit, validateInput: getInputValidation, logged, player, logout }), [formErrors, submit, getInputValidation, logged, player, logout])
+
   return (
-    <AuthContext.Provider value={{ formErrors, submit, validateInput: getInputValidation }}>{
+    <AuthContext.Provider value={contextValue}>{
       children
     }</AuthContext.Provider>
   )

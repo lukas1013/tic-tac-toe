@@ -6,8 +6,8 @@ import './style.css';
 const srcInd = Math.floor(Math.random() * 8 + 1)
 const userIcon = require(`../../assets/icon${srcInd}.png`)
 
-export default function PlayerIcon(): JSX.Element {
+export default function PlayerIcon(props: { className?: string }): JSX.Element {
   return (
-    <img src={userIcon} id="profile-icon" alt="profile.png" title="profile icon" />
+    <img src={userIcon} id="profile-icon" alt="profile.png" className={props.className} title="profile icon" />
   )
 }

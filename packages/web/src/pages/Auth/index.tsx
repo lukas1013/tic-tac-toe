@@ -4,7 +4,7 @@ import { FiChevronLeft } from 'react-icons/fi';
 
 import './style.css';
 
-import { useAuth, typeInput } from "../../contexts/AuthContext";
+import { useAuth, typeInput } from "../../contexts/auth";
 import authReducer from "./reducer";
 
 const Register = React.lazy(() => import("./Register"));
