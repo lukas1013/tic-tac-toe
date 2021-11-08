@@ -1,6 +1,9 @@
 import app  from './app';
-const PORT = 5000
+import socket from './socket'
+const server = socket(app)
 
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 5000
+
+server.listen(PORT, () => {
   console.log(`app listening at http://localhost:${PORT}`)
 })
