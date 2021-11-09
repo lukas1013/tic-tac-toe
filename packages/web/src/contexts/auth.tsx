@@ -50,15 +50,16 @@ const AuthContext = createContext({ logged: storage.retrieve('token') ? true : f
 export const AuthProvider = ({ children }: { children: typeChildren }): JSX.Element => {
   const [authError, setAuthError]: [AuthError, React.Dispatch<React.SetStateAction<AuthError>>] = useState({})
   const [formErrors, setFormErrors] = useState({} as typeInputError)
-  const [logged, setLogged] = useState(storage.retrieve('token') ? true : false)
+  const token = useMemo(() => storage.retrieve('token'), [])
+  const [logged, setLogged] = useState(!!token)
   const [player, setPlayer] = useState(logged ? storage.retrieve('player') : null)
   const history = useHistory()
 
   useEffect(() => {
-    if (logged) {
-      socket.emit('online')
+    if (logged && token) {
+      socket.emit('online', token)
     }
-  }, [logged])
+  }, [logged, token])
   
   const getErrors = useCallback<typeGetErrors>((inputs = ['userName', 'email', 'password', 'confirmPass']): typeInputError => {
     const _authError = authError;

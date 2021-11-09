@@ -6,7 +6,6 @@ import './style.css';
 
 import PlayerIcon from "../../components/PlayerIcon";
 import { useAuth } from "../../contexts/auth";
-import socket from '../../socket';
 
 export default function Home(): JSX.Element {
   const { logout, player, logged } = useAuth()
