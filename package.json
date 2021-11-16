@@ -7,7 +7,8 @@
     "./packages/*"
   ],
   "scripts": {
-    "test": "jest"
+    "pretest": "clear",
+    "test": "NODE_ENV=test jest"
   },
   "author": "",
   "license": "MIT",

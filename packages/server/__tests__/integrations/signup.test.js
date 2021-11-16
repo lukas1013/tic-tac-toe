@@ -4,9 +4,11 @@ import app from '../../src/app';
 const truncate = require('../utils/truncate');
 
 describe('SignUp', () => {
-  beforeEach(() => {
+  beforeEach(done => {
     truncate()
-  }, 5000)
+
+    done()
+  })
 
   it('should create player with valid credentials', async () => {
     const response = await request(app)

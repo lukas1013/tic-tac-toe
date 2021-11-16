@@ -6,8 +6,14 @@ const sequelize = new Sequelize(database.database, database.username, database.p
   define: database.define
 })
 
-sequelize.authenticate()
-  .then(() => sequelize.sync())
-  .catch(err => console.log('Unable to connect to the database', err))
+ sequelize.authenticate()
+   .then(() => {
+     try {
+       sequelize.sync()
+     } catch (e) {
+       console.log(e);
+     }
+   })
+   .catch(err => console.log('Unable to connect to the database', err))
 
 export default sequelize

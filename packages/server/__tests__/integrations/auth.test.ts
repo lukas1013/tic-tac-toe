@@ -8,9 +8,11 @@ import generateToken from '../utils/generateToken';
 const truncate = require('../utils/truncate');
 
 describe('Authentication', () => {
-  beforeEach(() => {
+  beforeEach(done => {
     truncate();
-  }, 5000)
+
+    done()
+  })
 
   it('should authenticate with valid credentials', async () => {
     const player = await Player.createInstance({
